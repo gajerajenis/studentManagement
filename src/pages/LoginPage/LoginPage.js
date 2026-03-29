@@ -8,9 +8,36 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import './Login.scss';
 
+
+/* ✅ MOVE OUTSIDE */
+const Field = ({ id, label, type = 'text', value, onChange, icon, err, placeholder, noIcon, right, setFieldErr, setError }) => (
+  <div className={`lp-box__field${noIcon ? ' lp-box__field--no-icon' : ''}${err ? ' lp-box__field--error' : ''}`}>
+    <label htmlFor={id}>{label}</label>
+    <div className="lp-box__field-wrap">
+      {!noIcon && <span className="fi-left">{icon}</span>}
+      <input
+        id={id}
+        type={type}
+        value={value}
+        onChange={e => {
+          onChange(e.target.value);
+          setFieldErr(fe => ({ ...fe, [id]: '' }));
+          setError('');
+        }}
+        placeholder={placeholder}
+        autoComplete={id}
+      />
+      {right}
+    </div>
+    {err && <span className="lp-box__field__err">{err}</span>}
+  </div>
+);
+
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, isLoggedIn } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPwd, setShowPwd] = useState(false);
@@ -37,13 +64,16 @@ const LoginPage = () => {
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    setError(''); setSuccess('');
+    setError('');
+    setSuccess('');
+
     if (!validate()) return;
 
     setLoading(true);
-    await new Promise(r => setTimeout(r, 900)); // simulate latency
+    await new Promise(r => setTimeout(r, 900));
 
     const result = login({ email, password });
+
     if (result.ok) {
       setSuccess(`Welcome back, ${result.user.firstName}! Redirecting…`);
       setTimeout(() => navigate('/students'), 1000);
@@ -53,26 +83,9 @@ const LoginPage = () => {
     }
   };
 
-  const Field = ({ id, label, type = 'text', value, onChange, icon, err, placeholder, noIcon, right }) => (
-    <div className={`lp-box__field${noIcon ? ' lp-box__field--no-icon' : ''}${err ? ' lp-box__field--error' : ''}`}>
-      <label htmlFor={id}>{label}</label>
-      <div className="lp-box__field-wrap">
-        {!noIcon && <span className="fi-left">{icon}</span>}
-        <input
-          id={id} type={type} value={value}
-          onChange={e => { onChange(e.target.value); setFieldErr(fe => ({ ...fe, [id]: '' })); setError(''); }}
-          placeholder={placeholder}
-          autoComplete={id}
-        />
-        {right}
-      </div>
-      {err && <span className="lp-box__field__err">{err}</span>}
-    </div>
-  );
-
   return (
     <div className="login-page">
-      {/* ── Brand left ───────────────────────────────────────────────── */}
+      
       <aside className="lp-brand">
         <Link to="/" className="lp-brand__logo">
           <div className="lp-brand__logo-icon"><FiBookOpen /></div>
@@ -85,6 +98,7 @@ const LoginPage = () => {
             Sign in to access your dashboard — manage students, track performance,
             and stay on top of academic operations in real time.
           </p>
+
           <div className="lp-brand__features">
             {[
               { icon: <FiShield />, cls: 'teal', title: 'Secure Access', desc: 'Role-based login with encryption' },
@@ -100,22 +114,11 @@ const LoginPage = () => {
             ))}
           </div>
         </div>
-
-        <div className="lp-brand__card">
-          <div className="lp-brand__card-av">GJ</div>
-          <div className="lp-brand__card-info">
-            <strong>Gajera Jenis</strong>
-            <span>EduManage · Developer</span>
-          </div>
-          <span className="lp-brand__card-badge">Active</span>
-        </div>
       </aside>
 
-      {/* ── Form right ───────────────────────────────────────────────── */}
       <main className="lp-panel">
         <div className="lp-box">
-          {/* Mobile logo */}
-          <Link to="/" className="lp-box__mobile-logo">
+ <Link to="/" className="lp-box__mobile-logo">
             <div className="lp-box__mobile-logo-icon"><FiBookOpen /></div>
             <span>Edu<em>Manage</em></span>
           </Link>
@@ -127,19 +130,34 @@ const LoginPage = () => {
           </div>
 
           <form className="lp-box__form" onSubmit={handleSubmit} noValidate>
-            {error && <div className="lp-box__error">  <FiAlertCircle /> {error}   </div>}
-            {success && <div className="lp-box__success"><FiCheckCircle /> {success} </div>}
+
+            {error && <div className="lp-box__error"><FiAlertCircle /> {error}</div>}
+            {success && <div className="lp-box__success"><FiCheckCircle /> {success}</div>}
 
             <Field
-              id="email" label="Email Address" type="email"
-              value={email} onChange={setEmail} icon={<FiMail />}
-              err={fieldErr.email} placeholder="you@example.com"
+              id="email"
+              label="Email Address"
+              type="email"
+              value={email}
+              onChange={setEmail}
+              icon={<FiMail />}
+              err={fieldErr.email}
+              placeholder="you@example.com"
+              setFieldErr={setFieldErr}
+              setError={setError}
             />
 
             <Field
-              id="password" label="Password" type={showPwd ? 'text' : 'password'}
-              value={password} onChange={setPassword} icon={<FiLock />}
-              err={fieldErr.password} placeholder="Enter your password"
+              id="password"
+              label="Password"
+              type={showPwd ? 'text' : 'password'}
+              value={password}
+              onChange={setPassword}
+              icon={<FiLock />}
+              err={fieldErr.password}
+              placeholder="Enter your password"
+              setFieldErr={setFieldErr}
+              setError={setError}
               right={
                 <button type="button" className="eye" onClick={() => setShowPwd(v => !v)}>
                   {showPwd ? <FiEyeOff /> : <FiEye />}
@@ -147,6 +165,7 @@ const LoginPage = () => {
               }
             />
 
+            
             <div className="lp-box__opts">
               <label>
                 <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)} />
@@ -164,6 +183,7 @@ const LoginPage = () => {
             <p className="lp-box__foot">
               Don't have an account? <Link to="/signup">Create one →</Link>
             </p>
+
           </form>
         </div>
       </main>

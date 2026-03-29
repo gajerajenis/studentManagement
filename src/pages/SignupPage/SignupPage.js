@@ -15,7 +15,7 @@ const getStrength = (pwd) => {
     if (/[A-Z]/.test(pwd)) score++;
     if (/[0-9]/.test(pwd)) score++;
     if (/[^A-Za-z0-9]/.test(pwd)) score++;
-    return score; // 0–5
+    return score;
 };
 
 const STRENGTH_COLORS = ['', '#f87171', '#f87171', '#fbbf24', '#00d4aa', '#00d4aa'];
@@ -28,10 +28,38 @@ const STEPS = [
     { n: 4, title: 'Access Dashboard', desc: 'Log in and manage students' },
 ];
 
+/* ✅ FIXED: Field component OUTSIDE */
+const Field = React.memo(({ id, label, type = 'text', value, icon, err, placeholder, right, onChange }) => (
+    <div className={`sp-box__field${err ? ' sp-box__field--error' : ''}`}>
+        <label htmlFor={id}>{label}</label>
+        <div className="sp-box__field-wrap">
+            <span className="fi-left">{icon}</span>
+            <input
+                id={id}
+                type={type}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                autoComplete={id}
+            />
+            {right}
+        </div>
+        {err && <span className="sp-box__field__err">{err}</span>}
+    </div>
+));
+
 const SignupPage = () => {
     const navigate = useNavigate();
     const { signup, isLoggedIn } = useAuth();
-    const [form, setForm] = useState({ firstName: '', lastName: '', email: '', password: '', confirm: '' });
+
+    const [form, setForm] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirm: ''
+    });
+
     const [showPwd, setShowPwd] = useState(false);
     const [showCfm, setShowCfm] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -83,27 +111,9 @@ const SignupPage = () => {
 
     const pwdStrength = getStrength(form.password);
 
-    /* ── Reusable field ──────────────────────────────────────────────────────── */
-    const Field = ({ id, label, type = 'text', value, icon, err, placeholder, right }) => (
-        <div className={`sp-box__field${err ? ' sp-box__field--error' : ''}`}>
-            <label htmlFor={id}>{label}</label>
-            <div className="sp-box__field-wrap">
-                <span className="fi-left">{icon}</span>
-                <input
-                    id={id} type={type} value={value}
-                    onChange={e => set(id, e.target.value)}
-                    placeholder={placeholder}
-                    autoComplete={id}
-                />
-                {right}
-            </div>
-            {err && <span className="sp-box__field__err">{err}</span>}
-        </div>
-    );
-
     return (
         <div className="signup-page">
-            {/* ── Brand panel ───────────────────────────────────────────────── */}
+
             <aside className="sp-brand">
                 <Link to="/" className="sp-brand__logo">
                     <div className="sp-brand__logo-icon"><FiBookOpen /></div>
@@ -135,111 +145,91 @@ const SignupPage = () => {
                     </div>
                 </div>
 
-                <div style={{ fontSize: '0.75rem', color: 'rgba(148,163,184,0.4)', position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: '0.75rem', color: 'rgba(148,163,184,0.4)' }}>
                     © 2025 EduManage · Created by Mr. Gajera Jenis
                 </div>
             </aside>
 
-            {/* ── Form panel ────────────────────────────────────────────────── */}
             <main className="sp-panel">
                 <div className="sp-box">
-                    {/* Mobile logo */}
                     <Link to="/" className="sp-box__mobile-logo">
                         <div className="sp-box__mobile-logo-icon"><FiBookOpen /></div>
                         <span>Edu<em>Manage</em></span>
                     </Link>
+                    <form className="sp-box__form" onSubmit={handleSubmit} noValidate>
+                        <div className="sp-box__row">
+                            <Field
+                                id="firstName"
+                                label="First Name"
+                                value={form.firstName}
+                                icon={<FiUser />}
+                                err={fieldErr.firstName}
+                                placeholder="Aarav"
+                                onChange={(e) => set('firstName', e.target.value)}
+                            />
 
-                    {done ? (
-                        /* ── Success state ──────────────────────────────────────── */
-                        <div className="sp-box__done">
-                            <div className="sp-box__done-icon">🎉</div>
-                            <h3>Account Created!</h3>
-                            <p>
-                                Welcome, <strong>{form.firstName}</strong>! Your account has been created successfully.
-                                Sign in to start managing students.
-                            </p>
-                            <Link to="/login">
-                                Sign In Now <FiArrowRight />
-                            </Link>
+                            <Field
+                                id="lastName"
+                                label="Last Name"
+                                value={form.lastName}
+                                icon={<FiUser />}
+                                err={fieldErr.lastName}
+                                placeholder="Shah"
+                                onChange={(e) => set('lastName', e.target.value)}
+                            />
                         </div>
-                    ) : (
-                        <>
-                            <div className="sp-box__head">
-                                <div className="sp-box__tag"><span />New Account</div>
-                                <h2 className="sp-box__title">Create Account ✨</h2>
-                                <p className="sp-box__sub">Fill in your details to get started for free.</p>
-                            </div>
 
-                            <form className="sp-box__form" onSubmit={handleSubmit} noValidate>
-                                {error && <div className="sp-box__error"><FiAlertCircle /> {error}</div>}
+                        <Field
+                            id="email"
+                            label="Email Address"
+                            type="email"
+                            value={form.email}
+                            icon={<FiMail />}
+                            err={fieldErr.email}
+                            placeholder="you@example.com"
+                            onChange={(e) => set('email', e.target.value)}
+                        />
 
-                                {/* Name row */}
-                                <div className="sp-box__row">
-                                    <Field
-                                        id="firstName" label="First Name" value={form.firstName}
-                                        icon={<FiUser />} err={fieldErr.firstName} placeholder="Aarav"
-                                    />
-                                    <Field
-                                        id="lastName" label="Last Name" value={form.lastName}
-                                        icon={<FiUser />} err={fieldErr.lastName} placeholder="Shah"
-                                    />
-                                </div>
-
-                                {/* Email */}
-                                <Field
-                                    id="email" label="Email Address" type="email" value={form.email}
-                                    icon={<FiMail />} err={fieldErr.email} placeholder="you@example.com"
-                                />
-
-                                {/* Password */}
-                                <Field
-                                    id="password" label="Password" type={showPwd ? 'text' : 'password'} value={form.password}
-                                    icon={<FiLock />} err={fieldErr.password} placeholder="Min 6 characters"
-                                    right={
-                                        <button type="button" className="eye" onClick={() => setShowPwd(v => !v)}>
-                                            {showPwd ? <FiEyeOff /> : <FiEye />}
-                                        </button>
-                                    }
-                                />
-
-                                {/* Strength meter */}
-                                {form.password && (
-                                    <div className="sp-box__strength">
-                                        <div className="sp-box__strength-bar">
-                                            {[1, 2, 3, 4, 5].map(i => (
-                                                <span key={i} style={{ background: i <= pwdStrength ? STRENGTH_COLORS[pwdStrength] : undefined }} />
-                                            ))}
-                                        </div>
-                                        <div className="sp-box__strength-label" style={{ color: STRENGTH_COLORS[pwdStrength] }}>
-                                            {STRENGTH_LABELS[pwdStrength]}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Confirm password */}
-                                <Field
-                                    id="confirm" label="Confirm Password" type={showCfm ? 'text' : 'password'} value={form.confirm}
-                                    icon={<FiLock />} err={fieldErr.confirm} placeholder="Repeat password"
-                                    right={
-                                        <button type="button" className="eye" onClick={() => setShowCfm(v => !v)}>
-                                            {showCfm ? <FiEyeOff /> : <FiEye />}
-                                        </button>
-                                    }
-                                />
-
-                                <button type="submit" className="sp-box__submit" disabled={loading}>
-                                    {loading
-                                        ? <><div className="spin" /> Creating account…</>
-                                        : <><FiUserPlus /> Create Account <FiArrowRight /></>
-                                    }
+                        <Field
+                            id="password"
+                            label="Password"
+                            type={showPwd ? 'text' : 'password'}
+                            value={form.password}
+                            icon={<FiLock />}
+                            err={fieldErr.password}
+                            placeholder="Min 6 characters"
+                            right={
+                                <button type="button" className="eye" onClick={() => setShowPwd(v => !v)}>
+                                    {showPwd ? <FiEyeOff /> : <FiEye />}
                                 </button>
+                            }
+                            onChange={(e) => set('password', e.target.value)} // ✅ FIXED
+                        />
 
-                                <p className="sp-box__foot">
-                                    Already have an account? <Link to="/login">Sign in →</Link>
-                                </p>
-                            </form>
-                        </>
-                    )}
+                        <Field
+                            id="confirm"
+                            label="Confirm Password"
+                            type={showCfm ? 'text' : 'password'}
+                            value={form.confirm}
+                            icon={<FiLock />}
+                            err={fieldErr.confirm}
+                            placeholder="Repeat password"
+                            right={
+                                <button type="button" className="eye" onClick={() => setShowCfm(v => !v)}>
+                                    {showCfm ? <FiEyeOff /> : <FiEye />}
+                                </button>
+                            }
+                            onChange={(e) => set('confirm', e.target.value)}
+                        />
+
+                        <button type="submit" className="sp-box__submit" disabled={loading}>
+                            {loading
+                                ? <>Creating account…</>
+                                : <><FiUserPlus /> Create Account <FiArrowRight /></>
+                            }
+                        </button>
+
+                    </form>
                 </div>
             </main>
         </div>
