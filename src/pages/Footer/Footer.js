@@ -115,13 +115,13 @@ const Footer = () => {
                 </li>
 
                 <li>
-                  <a href="mailto:info@edumanage.com" className="footer__contact-item footer__contact-item--link">
+                  <a href="mailto:gajerajenis66@gmail.com" className="footer__contact-item footer__contact-item--link">
                     <div className="footer__contact-icon">
                       <FiMail />
                     </div>
                     <div>
                       <span className="footer__contact-label">Email</span>
-                      <span className="footer__contact-value">info@edumanage.com</span>
+                      <span className="footer__contact-value">gajerajenis66@gmail.com</span>
                     </div>
                   </a>
                 </li>
