@@ -1,0 +1,941 @@
+@import '../../styles/global.scss';
+
+/* ─── Page Wrapper ──────────────────────────────────────────────────────────── */
+.students-page {
+  min-height: 100vh;
+  background: $bg-dark;
+  padding-top: 90px;
+  position: relative;
+  overflow-x: hidden;
+
+  // Ambient background glow
+  &::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,212,170,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+/* ─── Page Header ───────────────────────────────────────────────────────────── */
+.page-hero {
+  padding: 60px 0 40px;
+  position: relative;
+  z-index: 1;
+
+  &__inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.2);
+    padding: 6px 14px;
+    border-radius: $radius-xl;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $primary;
+    margin-bottom: 16px;
+
+    span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $primary;
+      animation: pulse 2s infinite;
+    }
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: $text-primary;
+
+    em {
+      font-style: normal;
+      color: $primary;
+    }
+  }
+
+  &__subtitle {
+    margin-top: 12px;
+    font-size: 1rem;
+    color: $text-secondary;
+    max-width: 420px;
+  }
+
+  &__add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, $primary, $primary-dark);
+    color: $bg-dark;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: $radius-xl;
+    border: none;
+    transition: $transition;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,212,170,0.4);
+      &::before { transform: scaleX(1); }
+    }
+
+    svg { font-size: 1.1rem; }
+  }
+}
+
+/* ─── Stats Row ─────────────────────────────────────────────────────────────── */
+.students-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 0 0 40px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 480px) { grid-template-columns: 1fr 1fr; }
+}
+
+.stat-card {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: $transition;
+  animation: slide-in-up 0.5s ease both;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) { animation-delay: #{($i - 1) * 0.08}s; }
+  }
+
+  &:hover {
+    border-color: $border-hover;
+    background: $bg-card2;
+    transform: translateY(-3px);
+    box-shadow: $shadow-card;
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+
+    &--teal   { background: rgba(0,212,170,0.12);  color: $primary; }
+    &--purple { background: rgba(124,58,237,0.12); color: $accent-light; }
+    &--orange { background: rgba(255,107,53,0.12); color: $warning; }
+    &--blue   { background: rgba(59,130,246,0.12); color: #60a5fa; }
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__value {
+    font-family: $font-display;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: $text-primary;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 0.78rem;
+    color: $text-muted;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  &__trend {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: $radius-xl;
+
+    &--up   { background: rgba(0,212,170,0.12); color: $primary; }
+    &--down { background: rgba(255,107,53,0.12); color: $warning; }
+  }
+}
+
+/* ─── Toolbar ───────────────────────────────────────────────────────────────── */
+.students-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+
+  &__search {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+
+    svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-muted;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+      background: $bg-card;
+      border: 1px solid $border;
+      border-radius: $radius-md;
+      padding: 12px 16px 12px 44px;
+      color: $text-primary;
+      font-size: 0.9rem;
+      transition: $transition;
+      outline: none;
+
+      &::placeholder { color: $text-muted; }
+
+      &:focus {
+        border-color: $primary;
+        background: $bg-card2;
+        box-shadow: 0 0 0 3px rgba(0,212,170,0.1);
+      }
+    }
+  }
+
+  &__filter {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__filter-btn {
+    padding: 10px 18px;
+    border-radius: $radius-md;
+    border: 1px solid $border;
+    background: $bg-card;
+    color: $text-secondary;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: $transition;
+
+    &:hover {
+      border-color: $border-hover;
+      color: $text-primary;
+      background: $bg-card2;
+    }
+
+    &--active {
+      background: rgba(0,212,170,0.12);
+      border-color: rgba(0,212,170,0.3);
+      color: $primary;
+    }
+  }
+
+  &__view-toggle {
+    display: flex;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  &__view-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: $text-muted;
+    font-size: 1rem;
+    transition: $transition;
+
+    &--active {
+      background: rgba(0,212,170,0.15);
+      color: $primary;
+    }
+
+    &:hover:not(&--active) {
+      color: $text-secondary;
+      background: $bg-card2;
+    }
+  }
+}
+
+/* ─── Student Grid ──────────────────────────────────────────────────────────── */
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+
+  &--list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Student Card ──────────────────────────────────────────────────────────── */
+.student-card {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: $transition;
+  animation: scale-in 0.4s ease both;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-accent, #{$primary}), transparent);
+    opacity: 0;
+    transition: $transition;
+  }
+
+  &:hover {
+    border-color: rgba(0,212,170,0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,212,170,0.1);
+
+    &::before { opacity: 1; }
+  }
+
+  // List view variant
+  .students-grid--list & {
+    flex-direction: row;
+    align-items: center;
+    padding: 18px 24px;
+    gap: 20px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+
+    .students-grid--list & {
+      flex: 0 0 auto;
+      gap: 16px;
+      align-items: center;
+    }
+  }
+
+  &__avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-display;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: conic-gradient(var(--card-accent, #{$primary}), transparent 60%);
+      z-index: -1;
+      opacity: 0;
+      transition: $transition;
+    }
+
+    .student-card:hover &::after { opacity: 1; }
+  }
+
+  &__meta {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-family: $font-display;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $text-primary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__id {
+    font-size: 0.75rem;
+    color: $text-muted;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  &__status {
+    padding: 4px 10px;
+    border-radius: $radius-xl;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+
+    &--active   { background: rgba(0,212,170,0.12); color: $primary; }
+    &--inactive { background: rgba(255,107,53,0.12); color: $warning; }
+    &--pending  { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+
+    .students-grid--list & {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+    }
+  }
+
+  &__detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: $text-secondary;
+
+    svg { color: $text-muted; font-size: 0.9rem; flex-shrink: 0; }
+  }
+
+  &__grade-bar {
+    margin-top: 4px;
+
+    .students-grid--list & { display: none; }
+
+    &-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: $text-muted;
+      margin-bottom: 6px;
+    }
+
+    &-track {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    &-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--card-accent, #{$primary}), #{$primary-dark});
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px solid $border;
+
+    .students-grid--list & {
+      border-top: none;
+      padding-top: 0;
+      flex: 0 0 auto;
+    }
+  }
+
+  &__action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 12px;
+    border-radius: $radius-sm;
+    border: 1px solid $border;
+    background: transparent;
+    color: $text-secondary;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: $transition;
+
+    .students-grid--list & { flex: 0 0 auto; padding: 8px 14px; }
+
+    &:hover { background: rgba(255,255,255,0.05); color: $text-primary; border-color: $border-hover; }
+
+    &--view:hover   { color: #60a5fa; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.08); }
+    &--edit:hover   { color: $primary; border-color: rgba(0,212,170,0.3); background: rgba(0,212,170,0.08); }
+    &--delete:hover { color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.08); }
+  }
+}
+
+/* ─── Empty State ───────────────────────────────────────────────────────────── */
+.students-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  animation: slide-in-up 0.5s ease;
+
+  &__icon {
+    width: 80px;
+    height: 80px;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: $text-muted;
+  }
+
+  h3 {
+    font-family: $font-display;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: $text-muted;
+    font-size: 0.9rem;
+    max-width: 300px;
+  }
+}
+
+/* ─── Modal Overlay ─────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: scale-in 0.2s ease;
+}
+
+.modal {
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+  animation: slide-in-up 0.3s ease;
+
+  // Top accent line
+  &::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, $primary, $accent);
+    border-radius: $radius-lg $radius-lg 0 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 0;
+
+    h2 {
+      font-family: $font-display;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: $text-primary;
+    }
+
+    p {
+      font-size: 0.82rem;
+      color: $text-muted;
+      margin-top: 4px;
+    }
+  }
+
+  &__close {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-sm;
+    border: 1px solid $border;
+    background: transparent;
+    color: $text-secondary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: $transition;
+    flex-shrink: 0;
+
+    &:hover { background: rgba(248,113,113,0.1); color: #f87171; border-color: rgba(248,113,113,0.3); }
+  }
+
+  &__body {
+    padding: 24px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* ─── Form Elements ─────────────────────────────────────────────────────────── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 480px) { grid-template-columns: 1fr; }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  input, select {
+    background: $bg-input;
+    border: 1px solid $border;
+    border-radius: $radius-md;
+    padding: 12px 16px;
+    color: $text-primary;
+    font-size: 0.9rem;
+    outline: none;
+    transition: $transition;
+    width: 100%;
+
+    &::placeholder { color: $text-muted; }
+
+    &:focus {
+      border-color: $primary;
+      background: rgba(0,212,170,0.04);
+      box-shadow: 0 0 0 3px rgba(0,212,170,0.1);
+    }
+
+    option { background: $bg-card; }
+  }
+
+  select { appearance: none; cursor: pointer; }
+
+  &--error input,
+  &--error select {
+    border-color: #f87171;
+    &:focus { box-shadow: 0 0 0 3px rgba(248,113,113,0.1); }
+  }
+
+  &__error {
+    font-size: 0.75rem;
+    color: #f87171;
+    margin-top: -4px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid $border;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: $radius-md;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: $transition;
+  border: none;
+
+  &--primary {
+    background: linear-gradient(135deg, $primary, $primary-dark);
+    color: $bg-dark;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,212,170,0.4);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    border: 1px solid $border;
+    color: $text-secondary;
+
+    &:hover { border-color: $border-hover; color: $text-primary; background: rgba(255,255,255,0.04); }
+  }
+
+  &--danger {
+    background: rgba(248,113,113,0.15);
+    border: 1px solid rgba(248,113,113,0.3);
+    color: #f87171;
+
+    &:hover { background: rgba(248,113,113,0.25); box-shadow: 0 4px 20px rgba(248,113,113,0.2); }
+  }
+}
+
+/* ─── View Modal ────────────────────────────────────────────────────────────── */
+.student-view {
+  &__hero {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 28px;
+    background: linear-gradient(135deg, rgba(0,212,170,0.06), rgba(124,58,237,0.06));
+    border-bottom: 1px solid $border;
+  }
+
+  &__avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-display;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 30px rgba(0,212,170,0.3);
+  }
+
+  &__info h3 {
+    font-family: $font-display;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: $text-primary;
+  }
+
+  &__info p {
+    font-size: 0.82rem;
+    color: $text-muted;
+    margin-top: 4px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 24px 28px;
+
+    @media (max-width: 480px) { grid-template-columns: 1fr; }
+  }
+
+  &__field {
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: $text-muted;
+      margin-bottom: 4px;
+    }
+
+    span {
+      font-size: 0.95rem;
+      color: $text-primary;
+      font-weight: 500;
+    }
+  }
+}
+
+/* ─── Delete Confirm ────────────────────────────────────────────────────────── */
+.delete-confirm {
+  padding: 28px;
+  text-align: center;
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin: 0 auto 20px;
+    color: #f87171;
+  }
+
+  h3 {
+    font-family: $font-display;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 0.88rem;
+    color: $text-secondary;
+    max-width: 300px;
+    margin: 0 auto 28px;
+    line-height: 1.7;
+  }
+}
+
+/* ─── Toast Notification ────────────────────────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  top: 100px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background: $bg-card2;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.88rem;
+  color: $text-primary;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  animation: slide-in-right 0.3s ease;
+  min-width: 260px;
+
+  &__icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  &--success { border-left: 3px solid $primary; .toast__icon { color: $primary; } }
+  &--error   { border-left: 3px solid #f87171; .toast__icon { color: #f87171; } }
+  &--info    { border-left: 3px solid #60a5fa; .toast__icon { color: #60a5fa; } }
+}
+
+/* ─── Pagination ────────────────────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding-bottom: 60px;
+  position: relative;
+  z-index: 1;
+
+  &__btn {
+    width: 38px;
+    height: 38px;
+    border-radius: $radius-sm;
+    border: 1px solid $border;
+    background: $bg-card;
+    color: $text-secondary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: $transition;
+
+    &:hover { border-color: $primary; color: $primary; background: rgba(0,212,170,0.08); }
+    &--active { background: $primary; border-color: $primary; color: $bg-dark; font-weight: 700; }
+    &--arrow { font-size: 1rem; }
+  }
+}

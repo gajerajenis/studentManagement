@@ -1,0 +1,1257 @@
+// https://claude.ai/share/50e7622e-7a40-46a7-a01d-8bd50f0df142
+
+
+mera last prompt ye tha :- 
+
+
+lissen proper muje react js me aek studetnt managemnt ka project banahe with best model ui ke sath 
+usame kya hoga 
+
+- home page 
+  - header (menu , logo , or,login button)
+  - aek best ui ke sath slider hoga same images ke sath first time open time usame text animation hote use aye 
+  - then boxs hoge usame deatil hogi thodi bahut 
+  - badame grllery section hoga best ui ke ke sath 
+  - on last fotter - on it contct infromation , with sotial media icone ke sath link hogi 
+
+- menu studetn page 
+  - usame add section 
+  - Edit section 
+  - Deleyte 
+  - View section hoga with best ui 
+
+firast iintan banvo proper or ui karna he mui , or with scss proper 
+
+muje full code proper do 
+
+
+
+
+----------------------------------------------------
+
+
+usame muje home page done he student section baki so me header or slide ka code sahre kar rah hui usaem tume pata lag jayega ka 
+kaisa theme he.....
+
+Header.js 
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { FiMenu, FiX, FiBookOpen } from 'react-icons/fi';
+import './Header.scss';
+
+const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { label: 'Home', path: '/' },
+    { label: 'About', path: '/#about' },
+    { label: 'Gallery', path: '/#gallery' },
+    { label: 'Contact', path: '/#contact' },
+  ];
+
+  return (
+    <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
+      <div className="container header__inner">
+        {/* Logo */}
+        <Link to="/" className="header__logo">
+          <div className="header__logo-icon">
+            <FiBookOpen />
+          </div>
+          <span className="header__logo-text">
+            Edu<span>Manage</span>
+          </span>
+        </Link>
+
+        {/* Nav */}
+        <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
+          <ul className="header__nav-list">
+            {navLinks.map((link) => (
+              <li key={link.path}>
+                <a
+                  href={link.path}
+                  className={`header__nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Right Actions */}
+        <div className="header__actions">
+          <Link to="/students" className="header__cta-btn">
+            <span>Student Portal</span>
+            <div className="header__cta-btn-glow" />
+          </Link>
+          <button
+            className="header__menu-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <FiX /> : <FiMenu />}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
+
+@import '../../styles/global.scss';
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: $transition;
+
+  &--scrolled {
+    background: rgba(10, 15, 26, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 14px 0;
+    border-bottom: 1px solid $border;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  // Logo
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  &__logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, $primary, $accent);
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    animation: glow-pulse 3s ease infinite;
+  }
+
+  &__logo-text {
+    font-family: $font-display;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: $text-primary;
+
+    span {
+      color: $primary;
+    }
+  }
+
+  // Nav
+  &__nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    @media (max-width: 768px) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10,15,26,0.98);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: $transition;
+      z-index: 999;
+
+      &--open {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+  }
+
+  &__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+
+  &__nav-link {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: $text-secondary;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: $radius-sm;
+    transition: $transition;
+    position: relative;
+
+    @media (max-width: 768px) {
+      font-size: 1.4rem;
+      font-family: $font-display;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background: $primary;
+      transform: scaleX(0);
+      transition: $transition;
+    }
+
+    &:hover, &.active {
+      color: $text-primary;
+
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  // Actions
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1000;
+  }
+
+  &__cta-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, $primary, $primary-dark);
+    color: $bg-dark;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: $radius-xl;
+    text-decoration: none;
+    transition: $transition;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,212,170,0.4);
+    }
+
+    &-glow {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    &:hover &-glow {
+      transform: translateX(100%);
+    }
+  }
+
+  &__menu-toggle {
+    display: none;
+    background: $bg-card;
+    border: 1px solid $border;
+    color: $text-primary;
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-sm;
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    transition: $transition;
+
+    &:hover {
+      background: $bg-card2;
+      border-color: $primary;
+    }
+
+    @media (max-width: 768px) {
+      display: flex;
+    }
+  }
+}
+
+
+....................................
+
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import './Slider.scss';
+
+const slides = [
+  {
+    id: 1,
+    tagline: 'Next-Gen Education Platform',
+    title: 'Empower Every',
+    titleHighlight: 'Students Journey',
+    subtitle: 'Track progress, manage records, and unlock academic potential with our cutting-edge student management system.',
+    cta: 'Explore Students',
+    ctaLink: '/students',
+    stats: [
+      { value: '2,400+', label: 'Students Enrolled' },
+      { value: '98%', label: 'Success Rate' },
+      { value: '120+', label: 'Courses' },
+    ],
+    gradient: 'linear-gradient(135deg, #0a0f1a 0%, #0d2040 50%, #0a1530 100%)',
+    accentColor: '#00d4aa',
+    shape: 'circles',
+  },
+  {
+    id: 2,
+    tagline: 'Smart Analytics Dashboard',
+    title: 'Data-Driven',
+    titleHighlight: 'Academic Insights',
+    subtitle: 'Get real-time insights into student performance, attendance trends, and course completion metrics.',
+    cta: 'Manage Students',
+    ctaLink: '/students',
+    stats: [
+      { value: '360°', label: 'Student View' },
+      { value: '50+', label: 'Reports Generated' },
+      { value: '24/7', label: 'Access Anywhere' },
+    ],
+    gradient: 'linear-gradient(135deg, #0a0f1a 0%, #1a0d2e 50%, #0f0a1a 100%)',
+    accentColor: '#7c3aed',
+    shape: 'hexagons',
+  },
+  {
+    id: 3,
+    tagline: 'Seamless Administration',
+    title: 'Simplify Your',
+    titleHighlight: 'Campus Operations',
+    subtitle: 'From enrollment to graduation — manage your entire institution from one powerful, intuitive platform.',
+    cta: 'Get Started',
+    ctaLink: '/students',
+    stats: [
+      { value: '5 min', label: 'Setup Time' },
+      { value: '100%', label: 'Cloud-Based' },
+      { value: '∞', label: 'Scalability' },
+    ],
+    gradient: 'linear-gradient(135deg, #0a0f1a 0%, #1a1000 50%, #0f1a0a 100%)',
+    accentColor: '#ff6b35',
+    shape: 'triangles',
+  },
+];
+
+const AnimatedText = ({ text, isActive, delay = 0 }) => {
+  return (
+    <span className={`animated-text ${isActive ? 'animated-text--active' : ''}`}
+      style={{ '--delay': `${delay}ms` }}>
+      {text.split('').map((char, i) => (
+        <span key={i} className="animated-text__char"
+          style={{ '--char-delay': `${delay + i * 30}ms` }}>
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </span>
+  );
+};
+
+const Slider = () => {
+  const [current, setCurrent] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const intervalRef = useRef(null);
+  const progressRef = useRef(null);
+
+  const slide = slides[current];
+
+  const goToSlide = (index) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setProgress(0);
+    clearInterval(intervalRef.current);
+    clearInterval(progressRef.current);
+    setTimeout(() => {
+      setCurrent(index);
+      setIsTransitioning(false);
+      startAutoplay();
+    }, 400);
+  };
+
+  const nextSlide = () => goToSlide((current + 1) % slides.length);
+  const prevSlide = () => goToSlide((current - 1 + slides.length) % slides.length);
+
+  const startAutoplay = () => {
+    setProgress(0);
+    let prog = 0;
+    progressRef.current = setInterval(() => {
+      prog += 0.5;
+      setProgress(prog);
+      if (prog >= 100) clearInterval(progressRef.current);
+    }, 25);
+    intervalRef.current = setTimeout(() => {
+      setCurrent(prev => {
+        const next = (prev + 1) % slides.length;
+        return next;
+      });
+      setProgress(0);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    startAutoplay();
+    return () => {
+      clearInterval(intervalRef.current);
+      clearInterval(progressRef.current);
+    };
+  }, [current]);
+
+  return (
+    <section
+      className={`slider ${isTransitioning ? 'slider--transitioning' : ''}`}
+      style={{ '--accent': slide.accentColor, background: slide.gradient }}
+    >
+      {/* Background shapes */}
+      <div className={`slider__bg-shapes slider__bg-shapes--${slide.shape}`}>
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className={`shape shape--${i}`} />
+        ))}
+      </div>
+
+      {/* Grid overlay */}
+      <div className="slider__grid-overlay" />
+
+      {/* Content */}
+      <div className="container slider__content">
+        <div className="slider__text-col">
+          {/* Tagline */}
+          <div className={`slider__tagline ${!isTransitioning ? 'slider__tagline--visible' : ''}`}>
+            <span className="slider__tagline-dot" />
+            {slide.tagline}
+          </div>
+
+          {/* Main Title */}
+          <h1 className={`slider__title ${!isTransitioning ? 'slider__title--visible' : ''}`}>
+            <span className="slider__title-line">{slide.title}</span>
+            <br />
+            <span className="slider__title-highlight">
+              <AnimatedText text={slide.titleHighlight} isActive={!isTransitioning} delay={200} />
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className={`slider__subtitle ${!isTransitioning ? 'slider__subtitle--visible' : ''}`}>
+            {slide.subtitle}
+          </p>
+
+          {/* CTA */}
+          <div className={`slider__cta-group ${!isTransitioning ? 'slider__cta-group--visible' : ''}`}>
+            <Link to={slide.ctaLink} className="slider__cta-primary">
+              <span>{slide.cta}</span>
+              <FiArrowRight className="slider__cta-icon" />
+            </Link>
+            <a href="#about" className="slider__cta-secondary">
+              Learn More
+            </a>
+          </div>
+
+          {/* Stats */}
+          <div className={`slider__stats ${!isTransitioning ? 'slider__stats--visible' : ''}`}>
+            {slide.stats.map((stat, i) => (
+              <div key={i} className="slider__stat">
+                <span className="slider__stat-value">{stat.value}</span>
+                <span className="slider__stat-label">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Visual Side */}
+        <div className={`slider__visual ${!isTransitioning ? 'slider__visual--visible' : ''}`}>
+          <div className="slider__visual-card">
+            <div className="slider__visual-header">
+              <div className="slider__visual-dots">
+                <span /><span /><span />
+              </div>
+              <span className="slider__visual-label">Student Dashboard</span>
+            </div>
+            <div className="slider__visual-body">
+              <div className="slider__visual-stat-row">
+                {['Enrolled', 'Active', 'Graduated'].map((label, i) => (
+                  <div key={i} className="slider__visual-mini-stat">
+                    <div className="slider__visual-mini-bar" style={{ '--fill': `${[85, 92, 78][i]}%` }} />
+                    <span>{label}</span>
+                    <strong>{['850', '920', '780'][i]}</strong>
+                  </div>
+                ))}
+              </div>
+              <div className="slider__visual-avatar-row">
+                {['AS', 'PP', 'RM', 'SG', 'KS'].map((av, i) => (
+                  <div key={i} className="slider__visual-avatar" style={{ '--av-i': i }}>
+                    {av}
+                  </div>
+                ))}
+                <span className="slider__visual-more">+40</span>
+              </div>
+              <div className="slider__visual-progress-block">
+                <span>Course Completion</span>
+                <div className="slider__visual-progress-bar">
+                  <div className="slider__visual-progress-fill" style={{ '--width': '78%' }} />
+                </div>
+                <span>78%</span>
+              </div>
+            </div>
+          </div>
+          {/* Floating badges */}
+          <div className="slider__badge slider__badge--1">
+            <span className="slider__badge-icon">🎓</span>
+            <span>Top Performer</span>
+          </div>
+          <div className="slider__badge slider__badge--2">
+            <span className="slider__badge-icon">📊</span>
+            <span>Live Analytics</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="slider__controls">
+        <button className="slider__arrow slider__arrow--prev" onClick={prevSlide} aria-label="Previous">
+          <FiChevronLeft />
+        </button>
+
+        {/* Indicators */}
+        <div className="slider__indicators">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              className={`slider__indicator ${i === current ? 'slider__indicator--active' : ''}`}
+              onClick={() => goToSlide(i)}
+            >
+              {i === current && (
+                <svg viewBox="0 0 36 36" className="slider__progress-ring">
+                  <circle cx="18" cy="18" r="16" className="slider__progress-track" />
+                  <circle cx="18" cy="18" r="16" className="slider__progress-fill"
+                    style={{ '--progress': progress }} />
+                </svg>
+              )}
+              <span className="slider__indicator-dot" />
+            </button>
+          ))}
+        </div>
+
+        <button className="slider__arrow slider__arrow--next" onClick={nextSlide} aria-label="Next">
+          <FiChevronRight />
+        </button>
+      </div>
+
+      {/* Scroll hint */}
+      <div className="slider__scroll-hint">
+        <div className="slider__scroll-mouse">
+          <div className="slider__scroll-wheel" />
+        </div>
+        <span>Scroll Down</span>
+      </div>
+    </section>
+  );
+};
+
+export default Slider;
+
+@import '../../styles/global.scss';
+
+.slider {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.6s ease;
+
+  &--transitioning {
+    .slider__text-col > * {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+
+  // Background shapes
+  &__bg-shapes {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    .shape {
+      position: absolute;
+      opacity: 0.06;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    &--circles .shape {
+      border-radius: 50%;
+      background: var(--accent);
+
+      @for $i from 0 through 7 {
+        &--#{$i} {
+          width: #{80 + $i * 30}px;
+          height: #{80 + $i * 30}px;
+          top: #{10 + $i * 10}%;
+          left: #{5 + $i * 12}%;
+          animation-delay: #{$i * 0.8}s;
+          animation-duration: #{6 + $i}s;
+        }
+      }
+    }
+
+    &--hexagons .shape {
+      width: 60px;
+      height: 60px;
+      background: var(--accent);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+      @for $i from 0 through 7 {
+        &--#{$i} {
+          width: #{50 + $i * 20}px;
+          height: #{50 + $i * 20}px;
+          top: #{5 + $i * 12}%;
+          left: #{10 + $i * 11}%;
+          animation-delay: #{$i * 0.6}s;
+        }
+      }
+    }
+
+    &--triangles .shape {
+      width: 0;
+      height: 0;
+
+      @for $i from 0 through 7 {
+        &--#{$i} {
+          $s: 40 + $i * 15;
+          border-left: #{$s/2}px solid transparent;
+          border-right: #{$s/2}px solid transparent;
+          border-bottom: #{$s}px solid var(--accent);
+          opacity: 0.05;
+          top: #{5 + $i * 11}%;
+          left: #{8 + $i * 11}%;
+          animation-delay: #{$i * 0.7}s;
+        }
+      }
+    }
+  }
+
+  // Grid overlay
+  &__grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  // Content Layout
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    padding-top: 100px;
+    padding-bottom: 60px;
+    position: relative;
+    z-index: 2;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding-top: 120px;
+    }
+  }
+
+  &__text-col > * {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  // Tagline
+  &__tagline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 16px;
+    border-radius: $radius-xl;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s 0.1s ease, transform 0.5s 0.1s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__tagline-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease infinite;
+  }
+
+  // Title
+  &__title {
+    font-family: $font-display;
+    font-size: clamp(2.6rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.5s 0.2s ease, transform 0.5s 0.2s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__title-line {
+    color: $text-primary;
+    display: block;
+  }
+
+  &__title-highlight {
+    color: var(--accent);
+    display: block;
+  }
+
+  // Animated text chars
+  .animated-text {
+    display: inline-block;
+  }
+
+  .animated-text__char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+
+    .animated-text--active & {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: var(--char-delay);
+    }
+  }
+
+  // Subtitle
+  &__subtitle {
+    font-size: 1.05rem;
+    color: $text-secondary;
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s 0.35s ease, transform 0.5s 0.35s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // CTA Group
+  &__cta-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s 0.45s ease, transform 0.5s 0.45s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 30px;
+    background: var(--accent);
+    color: $bg-dark;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: $radius-xl;
+    text-decoration: none;
+    transition: $transition;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.2);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,212,170,0.35);
+
+      &::before { transform: scaleX(1); }
+    }
+  }
+
+  &__cta-icon {
+    transition: transform 0.3s ease;
+    .slider__cta-primary:hover & {
+      transform: translateX(4px);
+    }
+  }
+
+  &__cta-secondary {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: $text-secondary;
+    text-decoration: none;
+    padding: 14px 20px;
+    border-radius: $radius-xl;
+    border: 1px solid $border;
+    transition: $transition;
+
+    &:hover {
+      color: $text-primary;
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.05);
+    }
+  }
+
+  // Stats
+  &__stats {
+    display: flex;
+    gap: 32px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s 0.55s ease, transform 0.5s 0.55s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 36px;
+      background: $border;
+    }
+  }
+
+  &__stat-value {
+    font-family: $font-display;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  &__stat-label {
+    font-size: 0.78rem;
+    color: $text-muted;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  // Visual Side
+  &__visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s 0.3s ease, transform 0.6s 0.3s ease;
+
+    &--visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @media (max-width: 1024px) {
+      display: none;
+    }
+  }
+
+  &__visual-card {
+    background: rgba(17,24,39,0.9);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: $radius-lg;
+    padding: 24px;
+    width: 380px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  &__visual-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $border;
+  }
+
+  &__visual-dots {
+    display: flex;
+    gap: 6px;
+
+    span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+
+      &:nth-child(1) { background: #ff5f57; }
+      &:nth-child(2) { background: #febc2e; }
+      &:nth-child(3) { background: #28c840; }
+    }
+  }
+
+  &__visual-label {
+    font-size: 0.8rem;
+    color: $text-muted;
+    font-weight: 500;
+  }
+
+  &__visual-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__visual-stat-row {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__visual-mini-stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    text-align: center;
+
+    span {
+      font-size: 0.72rem;
+      color: $text-muted;
+    }
+
+    strong {
+      font-size: 1rem;
+      font-weight: 700;
+      color: $text-primary;
+    }
+  }
+
+  &__visual-mini-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      display: block;
+      height: 100%;
+      width: var(--fill);
+      background: var(--accent);
+      border-radius: 2px;
+      animation: shimmer 2s ease infinite;
+    }
+  }
+
+  &__visual-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: -8px;
+    padding: 12px 0;
+    border-top: 1px solid $border;
+    border-bottom: 1px solid $border;
+  }
+
+  &__visual-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), $accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: white;
+    border: 2px solid $bg-card;
+    margin-left: calc(var(--av-i) * -8px);
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: translateY(-4px) scale(1.1);
+      z-index: 10;
+    }
+  }
+
+  &__visual-more {
+    margin-left: 4px;
+    font-size: 0.78rem;
+    color: $text-muted;
+    font-weight: 600;
+  }
+
+  &__visual-progress-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.8rem;
+    color: $text-secondary;
+  }
+
+  &__visual-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__visual-progress-fill {
+    height: 100%;
+    width: var(--width);
+    background: linear-gradient(90deg, var(--accent), $accent);
+    border-radius: 3px;
+  }
+
+  // Floating badges
+  &__badge {
+    position: absolute;
+    background: rgba(17,24,39,0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: $radius-md;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: $text-primary;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+
+    &--1 {
+      top: 20px;
+      right: -20px;
+      animation: float 4s ease-in-out 1s infinite;
+    }
+
+    &--2 {
+      bottom: 30px;
+      left: -20px;
+      animation: float 5s ease-in-out 0.5s infinite;
+    }
+  }
+
+  // Controls
+  &__controls {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 10;
+  }
+
+  &__arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid $border;
+    color: $text-secondary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $transition;
+    font-size: 1.1rem;
+
+    &:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: $bg-dark;
+      transform: scale(1.1);
+    }
+  }
+
+  &__indicators {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__indicator {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    &-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transition: $transition;
+      display: block;
+    }
+
+    &--active &-dot {
+      background: var(--accent);
+    }
+  }
+
+  &__progress-ring {
+    position: absolute;
+    inset: 0;
+    width: 30px;
+    height: 30px;
+    transform: rotate(-90deg);
+  }
+
+  &__progress-track {
+    fill: none;
+    stroke: rgba(255,255,255,0.1);
+    stroke-width: 2;
+  }
+
+  &__progress-fill {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 100.5;
+    stroke-dashoffset: calc(100.5 - (100.5 * var(--progress) / 100));
+    transition: stroke-dashoffset 0.1s linear;
+  }
+
+  // Scroll hint
+  &__scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.4;
+
+    @media (max-width: 768px) { display: none; }
+  }
+
+  &__scroll-mouse {
+    width: 24px;
+    height: 36px;
+    border: 2px solid $text-muted;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+
+  &__scroll-wheel {
+    width: 4px;
+    height: 8px;
+    background: $text-muted;
+    border-radius: 2px;
+    animation: float 2s ease-in-out infinite;
+  }
+
+  &__scroll-hint span {
+    font-size: 0.65rem;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    writing-mode: vertical-rl;
+  }
+}
+

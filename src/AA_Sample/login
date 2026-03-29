@@ -1,0 +1,91 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { FiMenu, FiX, FiBookOpen } from 'react-icons/fi';
+import './Header.scss';
+
+const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { label: 'Home', path: '/' },
+    { label: 'About', path: '/#about' },
+    { label: 'Gallery', path: '/#gallery' },
+    { label: 'Contact', path: '/#contact' },
+  ];
+
+  return (
+    <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
+      <div className="container header__inner">
+        {/* Logo */}
+        <Link to="/" className="header__logo">
+          <div className="header__logo-icon">
+            <FiBookOpen />
+          </div>
+          <span className="header__logo-text">
+            Edu<span>Manage</span>
+          </span>
+        </Link>
+
+        {/* Nav */}
+        <nav className={`header__nav ${menuOpen ? 'header__nav--open' : ''}`}>
+          <ul className="header__nav-list">
+            {navLinks.map((link) => (
+              <li key={link.path}>
+                <a
+                  href={link.path}
+                  className={`header__nav-link ${location.pathname === link.path ? 'active' : ''}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Right Actions */}
+        <div className="header__actions">
+          <Link to="/login" className="header__cta-btn">
+            <span>Login</span>
+            <div className="header__cta-btn-glow" />
+          </Link>
+
+             <Link to="/students" className="header__cta-btn">
+            <span>Student Portal</span>
+            <div className="header__cta-btn-glow" />
+          </Link>
+          <button
+            className="header__menu-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <FiX /> : <FiMenu />}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
+
+
+this is my header .js file so this is pace on pages header -> header.js 
+i want to first time user shw this show login button then this login page first time then sign up page link clikc show the sign page 
+on it first name , last name , email , password thne singp then show sucefull then then login email passowrd this sugnup user this manage proper 
+localstorage then
+
+
+if login then student -pbnel show if login then propefile show show 
+proper end clikc the logout then logout user proper 
+
+
+https://claude.ai/share/bf5c707e-6513-4ba4-927d-bba5800afc3c ..........................................

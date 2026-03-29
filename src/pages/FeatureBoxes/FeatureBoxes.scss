@@ -1,0 +1,184 @@
+@import '../../styles/global.scss';
+
+.features {
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,212,170,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  &__label {
+    display: inline-block;
+    background: rgba(0,212,170,0.1);
+    border: 1px solid rgba(0,212,170,0.2);
+    color: $primary;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 6px 16px;
+    border-radius: $radius-xl;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .section-subtitle {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Feature Box
+.feature-box {
+  position: relative;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-lg;
+  padding: 32px;
+  overflow: hidden;
+  cursor: default;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease var(--delay), transform 0.6s ease var(--delay),
+              border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &:hover {
+    border-color: var(--accent);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px var(--accent), inset 0 0 60px rgba(0,0,0,0.1);
+    transform: translateY(-4px);
+
+    .feature-box__glow {
+      opacity: 1;
+    }
+
+    .feature-box__icon {
+      background: var(--accent);
+      color: $bg-dark;
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .feature-box__line {
+      transform: scaleX(1);
+    }
+  }
+
+  &__glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.0), transparent 70%);
+    background: radial-gradient(ellipse at 50% -20%, var(--accent), transparent 60%);
+    opacity: 0.04;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  &__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: $radius-md;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: var(--accent);
+    transition: $transition;
+  }
+
+  &__stat {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__stat-value {
+    font-family: $font-display;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  &__stat-label {
+    font-size: 0.7rem;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 12px;
+  }
+
+  &__desc {
+    font-size: 0.9rem;
+    color: $text-secondary;
+    line-height: 1.7;
+  }
+
+  &__line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+}
