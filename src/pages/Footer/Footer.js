@@ -96,20 +96,21 @@ const Footer = () => {
                     <div>
                       <span className="footer__contact-label">Address</span>
                       <span className="footer__contact-value">
-                        123, Education Hub, Ahmedabad, Gujarat - 380001
+                        Limbadiya, 
+                        Ta: Gadhada <br/> Dis: Botad - 364730
                       </span>
                     </div>
                   </div>
                 </li>
 
                 <li>
-                  <a href="tel:+919876543210" className="footer__contact-item footer__contact-item--link">
+                  <a href="tel:+918160153934" className="footer__contact-item footer__contact-item--link">
                     <div className="footer__contact-icon">
                       <FiPhone />
                     </div>
                     <div>
                       <span className="footer__contact-label">Phone</span>
-                      <span className="footer__contact-value">+91 98765 43210</span>
+                      <span className="footer__contact-value">+91 81601 53934</span>
                     </div>
                   </a>
                 </li>
