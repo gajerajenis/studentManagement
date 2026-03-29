@@ -7,20 +7,20 @@ import {
 import './Footer.scss';
 
 const socialLinks = [
-  { icon: <FiFacebook />, href: '#', label: 'Facebook', color: '#1877f2' },
-  { icon: <FiTwitter />, href: '#', label: 'Twitter', color: '#1da1f2' },
-  { icon: <FiInstagram />, href: '#', label: 'Instagram', color: '#e1306c' },
-  { icon: <FiLinkedin />, href: '#', label: 'LinkedIn', color: '#0a66c2' },
-  { icon: <FiYoutube />, href: '#', label: 'YouTube', color: '#ff0000' },
+  { icon: <FiFacebook />, href: '/', label: 'Facebook', color: '#1877f2' },
+  { icon: <FiTwitter />, href: '/', label: 'Twitter', color: '#1da1f2' },
+  { icon: <FiInstagram />, href: '/', label: 'Instagram', color: '#e1306c' },
+  { icon: <FiLinkedin />, href: '/', label: 'LinkedIn', color: '#0a66c2' },
+  { icon: <FiYoutube />, href: '/', label: 'YouTube', color: '#ff0000' },
 ];
 
 const quickLinks = [
-  { label: 'About Us', href: '#about' },
-  { label: 'Gallery', href: '#gallery' },
+  { label: 'About Us', href: '/#about' },
+  { label: 'Gallery', href: '/#gallery' },
   { label: 'Student Portal', href: '/students' },
-  { label: 'Admissions', href: '#' },
-  { label: 'Academics', href: '#' },
-  { label: 'Careers', href: '#' },
+  { label: 'Admissions', href: '/' },
+  { label: 'Academics', href: '/' },
+  { label: 'Careers', href: '/' },
 ];
 
 const Footer = () => {
@@ -48,6 +48,7 @@ const Footer = () => {
                 </div>
                 <span>Edu<span>Manage</span></span>
               </Link>
+
               <p className="footer__brand-desc">
                 Empowering institutions with next-generation student management tools. Simplify your campus operations and unlock student potential.
               </p>
@@ -100,6 +101,7 @@ const Footer = () => {
                     </div>
                   </div>
                 </li>
+
                 <li>
                   <a href="tel:+919876543210" className="footer__contact-item footer__contact-item--link">
                     <div className="footer__contact-icon">
@@ -111,6 +113,7 @@ const Footer = () => {
                     </div>
                   </a>
                 </li>
+
                 <li>
                   <a href="mailto:info@edumanage.com" className="footer__contact-item footer__contact-item--link">
                     <div className="footer__contact-icon">
@@ -137,10 +140,13 @@ const Footer = () => {
                   placeholder="Enter your email"
                   className="footer__newsletter-input"
                 />
-                <button className="footer__newsletter-btn">Subscribe</button>
+                <button type="button" className="footer__newsletter-btn">
+                  Subscribe
+                </button>
               </div>
               <p className="footer__newsletter-note">No spam, unsubscribe at any time.</p>
             </div>
+
           </div>
         </div>
       </div>
@@ -152,9 +158,9 @@ const Footer = () => {
             © {new Date().getFullYear()} <span>EduManage</span>. All rights reserved.
           </p>
           <div className="footer__bottom-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Sitemap</a>
+            <a href="/">Privacy Policy</a>
+            <a href="/">Terms of Service</a>
+            <a href="/">Sitemap</a>
           </div>
         </div>
       </div>
