@@ -7,7 +7,6 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import './Signup.scss';
 
-/* ── Password strength helper ───────────────────────────────────────────────── */
 const getStrength = (pwd) => {
     let score = 0;
     if (pwd.length >= 6) score++;
@@ -17,9 +16,6 @@ const getStrength = (pwd) => {
     if (/[^A-Za-z0-9]/.test(pwd)) score++;
     return score;
 };
-
-const STRENGTH_COLORS = ['', '#f87171', '#f87171', '#fbbf24', '#00d4aa', '#00d4aa'];
-const STRENGTH_LABELS = ['', 'Too weak', 'Weak', 'Fair', 'Strong', 'Very strong'];
 
 const STEPS = [
     { n: 1, title: 'Create Account', desc: 'Fill in your personal details' },
@@ -108,8 +104,6 @@ const SignupPage = () => {
             setLoading(false);
         }
     };
-
-    const pwdStrength = getStrength(form.password);
 
     return (
         <div className="signup-page">
