@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FiMaximize2, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './Gallery.scss';
 
@@ -130,13 +130,13 @@ const Gallery = () => {
 
   const selectedIndex = selected ? filtered.findIndex(g => g.id === selected.id) : -1;
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (selectedIndex > 0) setSelected(filtered[selectedIndex - 1]);
-  };
+  }, [selectedIndex, filtered]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (selectedIndex < filtered.length - 1) setSelected(filtered[selectedIndex + 1]);
-  };
+  }, [selectedIndex, filtered]);
 
   useEffect(() => {
     const handleKey = (e) => {
@@ -147,7 +147,7 @@ const Gallery = () => {
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [selected, selectedIndex]);
+  }, [selected, selectedIndex, handlePrev, handleNext]);
 
   return (
     <section className="gallery" id="gallery">

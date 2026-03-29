@@ -27,20 +27,20 @@ const getColorIndex = (id) => (id % AVATAR_COLORS.length);
 
 // ─── Seed Data ───────────────────────────────────────────────────────────────
 const SEED_STUDENTS = [
-  { id: 1, name: 'Aarav Shah',     email: 'aarav@edu.in',    phone: '9876543210', course: 'Computer Science', grade: 'A+', gpa: 9.4, year: '3rd Year', status: 'active',   joined: '2022-07-15' },
-  { id: 2, name: 'Priya Patel',    email: 'priya@edu.in',    phone: '9876543211', course: 'Data Science',     grade: 'A',  gpa: 8.9, year: '2nd Year', status: 'active',   joined: '2023-07-10' },
-  { id: 3, name: 'Rohan Mehta',    email: 'rohan@edu.in',    phone: '9876543212', course: 'AI & ML',          grade: 'B+', gpa: 7.8, year: '1st Year', status: 'pending',  joined: '2024-07-20' },
-  { id: 4, name: 'Sneha Gupta',    email: 'sneha@edu.in',    phone: '9876543213', course: 'Cybersecurity',    grade: 'A+', gpa: 9.7, year: '4th Year', status: 'active',   joined: '2021-07-05' },
-  { id: 5, name: 'Karan Singh',    email: 'karan@edu.in',    phone: '9876543214', course: 'Cloud Computing',  grade: 'B',  gpa: 7.2, year: '2nd Year', status: 'inactive', joined: '2023-07-18' },
-  { id: 6, name: 'Nisha Verma',    email: 'nisha@edu.in',    phone: '9876543215', course: 'Web Development',  grade: 'A',  gpa: 8.6, year: '3rd Year', status: 'active',   joined: '2022-07-22' },
-  { id: 7, name: 'Dev Joshi',      email: 'dev@edu.in',      phone: '9876543216', course: 'Computer Science', grade: 'A+', gpa: 9.1, year: '1st Year', status: 'active',   joined: '2024-07-12' },
-  { id: 8, name: 'Pooja Sharma',   email: 'pooja@edu.in',    phone: '9876543217', course: 'Data Science',     grade: 'B+', gpa: 8.0, year: '3rd Year', status: 'active',   joined: '2022-07-08' },
-  { id: 9, name: 'Amit Kumar',     email: 'amit@edu.in',     phone: '9876543218', course: 'AI & ML',          grade: 'C+', gpa: 6.8, year: '2nd Year', status: 'inactive', joined: '2023-07-25' },
+  { id: 1, name: 'Aarav Shah', email: 'aarav@edu.in', phone: '9876543210', course: 'Computer Science', grade: 'A+', gpa: 9.4, year: '3rd Year', status: 'active', joined: '2022-07-15' },
+  { id: 2, name: 'Priya Patel', email: 'priya@edu.in', phone: '9876543211', course: 'Data Science', grade: 'A', gpa: 8.9, year: '2nd Year', status: 'active', joined: '2023-07-10' },
+  { id: 3, name: 'Rohan Mehta', email: 'rohan@edu.in', phone: '9876543212', course: 'AI & ML', grade: 'B+', gpa: 7.8, year: '1st Year', status: 'pending', joined: '2024-07-20' },
+  { id: 4, name: 'Sneha Gupta', email: 'sneha@edu.in', phone: '9876543213', course: 'Cybersecurity', grade: 'A+', gpa: 9.7, year: '4th Year', status: 'active', joined: '2021-07-05' },
+  { id: 5, name: 'Karan Singh', email: 'karan@edu.in', phone: '9876543214', course: 'Cloud Computing', grade: 'B', gpa: 7.2, year: '2nd Year', status: 'inactive', joined: '2023-07-18' },
+  { id: 6, name: 'Nisha Verma', email: 'nisha@edu.in', phone: '9876543215', course: 'Web Development', grade: 'A', gpa: 8.6, year: '3rd Year', status: 'active', joined: '2022-07-22' },
+  { id: 7, name: 'Dev Joshi', email: 'dev@edu.in', phone: '9876543216', course: 'Computer Science', grade: 'A+', gpa: 9.1, year: '1st Year', status: 'active', joined: '2024-07-12' },
+  { id: 8, name: 'Pooja Sharma', email: 'pooja@edu.in', phone: '9876543217', course: 'Data Science', grade: 'B+', gpa: 8.0, year: '3rd Year', status: 'active', joined: '2022-07-08' },
+  { id: 9, name: 'Amit Kumar', email: 'amit@edu.in', phone: '9876543218', course: 'AI & ML', grade: 'C+', gpa: 6.8, year: '2nd Year', status: 'inactive', joined: '2023-07-25' },
 ];
 
 const COURSES = ['Computer Science', 'Data Science', 'AI & ML', 'Cybersecurity', 'Cloud Computing', 'Web Development', 'Mobile Dev', 'DevOps'];
-const YEARS   = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
-const GRADES  = ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D'];
+const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+const GRADES = ['A+', 'A', 'B+', 'B', 'C+', 'C', 'D'];
 
 // ─── Toast ───────────────────────────────────────────────────────────────────
 const ToastContainer = ({ toasts }) => (
@@ -67,13 +67,13 @@ const Modal = ({ children, onClose }) => (
 const StudentForm = ({ student, onSave, onClose }) => {
   const isEdit = !!student?.id;
   const [form, setForm] = useState({
-    name:   student?.name   || '',
-    email:  student?.email  || '',
-    phone:  student?.phone  || '',
+    name: student?.name || '',
+    email: student?.email || '',
+    phone: student?.phone || '',
     course: student?.course || '',
-    year:   student?.year   || '',
-    grade:  student?.grade  || '',
-    gpa:    student?.gpa    || '',
+    year: student?.year || '',
+    grade: student?.grade || '',
+    gpa: student?.gpa || '',
     status: student?.status || 'active',
   });
   const [errors, setErrors] = useState({});
@@ -85,11 +85,11 @@ const StudentForm = ({ student, onSave, onClose }) => {
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim())   e.name   = 'Name is required';
-    if (!form.email.trim())  e.email  = 'Email is required';
+    if (!form.name.trim()) e.name = 'Name is required';
+    if (!form.email.trim()) e.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = 'Invalid email';
-    if (!form.course)        e.course = 'Course is required';
-    if (!form.year)          e.year   = 'Year is required';
+    if (!form.course) e.course = 'Course is required';
+    if (!form.year) e.year = 'Year is required';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -209,14 +209,14 @@ const StudentViewModal = ({ student, onClose, onEdit }) => {
 
       <div className="student-view__grid">
         {[
-          { label: 'Email',   value: student.email },
-          { label: 'Phone',   value: student.phone || '—' },
-          { label: 'Course',  value: student.course },
-          { label: 'Year',    value: student.year },
-          { label: 'Grade',   value: student.grade || '—' },
-          { label: 'GPA',     value: student.gpa ? `${student.gpa} / 10` : '—' },
-          { label: 'Joined',  value: student.joined || '—' },
-          { label: 'Status',  value: student.status },
+          { label: 'Email', value: student.email },
+          { label: 'Phone', value: student.phone || '—' },
+          { label: 'Course', value: student.course },
+          { label: 'Year', value: student.year },
+          { label: 'Grade', value: student.grade || '—' },
+          { label: 'GPA', value: student.gpa ? `${student.gpa} / 10` : '—' },
+          { label: 'Joined', value: student.joined || '—' },
+          { label: 'Status', value: student.status },
         ].map(f => (
           <div key={f.label} className="student-view__field">
             <label>{f.label}</label>
@@ -255,14 +255,14 @@ const DeleteModal = ({ student, onConfirm, onClose }) => (
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
 const StudentsPage = () => {
-  const [students, setStudents]   = useState(SEED_STUDENTS);
-  const [search, setSearch]       = useState('');
-  const [filter, setFilter]       = useState('all');   // all | active | inactive | pending
-  const [viewMode, setViewMode]   = useState('grid');  // grid | list
-  const [modal, setModal]         = useState(null);    // null | 'add' | 'edit' | 'view' | 'delete'
-  const [selected, setSelected]   = useState(null);
-  const [toasts, setToasts]       = useState([]);
-  const [page, setPage]           = useState(1);
+  const [students, setStudents] = useState(SEED_STUDENTS);
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('all');   // all | active | inactive | pending
+  const [viewMode, setViewMode] = useState('grid');  // grid | list
+  const [modal, setModal] = useState(null);    // null | 'add' | 'edit' | 'view' | 'delete'
+  const [selected, setSelected] = useState(null);
+  const [toasts, setToasts] = useState([]);
+  const [page, setPage] = useState(1);
   const PER_PAGE = 6;
 
   // ── Toast helper ─────────────────────────────────────────────────────────
@@ -302,7 +302,7 @@ const StudentsPage = () => {
   const filtered = useMemo(() => {
     let s = students;
     if (filter !== 'all') s = s.filter(st => st.status === filter);
-    if (search.trim())    s = s.filter(st =>
+    if (search.trim()) s = s.filter(st =>
       st.name.toLowerCase().includes(search.toLowerCase()) ||
       st.email.toLowerCase().includes(search.toLowerCase()) ||
       st.course.toLowerCase().includes(search.toLowerCase())
@@ -311,12 +311,12 @@ const StudentsPage = () => {
   }, [students, filter, search]);
 
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const paginated  = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const paginated = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   // Stats
-  const active   = students.filter(s => s.status === 'active').length;
+  const active = students.filter(s => s.status === 'active').length;
   const inactive = students.filter(s => s.status === 'inactive').length;
-  const avgGpa   = students.length ? (students.reduce((a, s) => a + (s.gpa || 0), 0) / students.length).toFixed(1) : 0;
+  const avgGpa = students.length ? (students.reduce((a, s) => a + (s.gpa || 0), 0) / students.length).toFixed(1) : 0;
 
   return (
     <div className="students-page">
@@ -344,10 +344,10 @@ const StudentsPage = () => {
         {/* ── Stats Row ─────────────────────────────────────────────────── */}
         <div className="students-stats">
           {[
-            { icon: <FiUsers />,      iconClass: 'teal',   value: students.length, label: 'Total Students', trend: '+12%', trendType: 'up' },
-            { icon: <FiCheckCircle />,iconClass: 'purple',  value: active,          label: 'Active',         trend: '+5%',  trendType: 'up' },
-            { icon: <FiBarChart2 />,  iconClass: 'orange',  value: avgGpa,          label: 'Avg GPA',        trend: '+0.3', trendType: 'up' },
-            { icon: <FiTrendingUp />, iconClass: 'blue',    value: inactive,        label: 'Inactive',       trend: '-2%',  trendType: 'down' },
+            { icon: <FiUsers />, iconClass: 'teal', value: students.length, label: 'Total Students', trend: '+12%', trendType: 'up' },
+            { icon: <FiCheckCircle />, iconClass: 'purple', value: active, label: 'Active', trend: '+5%', trendType: 'up' },
+            { icon: <FiBarChart2 />, iconClass: 'orange', value: avgGpa, label: 'Avg GPA', trend: '+0.3', trendType: 'up' },
+            { icon: <FiTrendingUp />, iconClass: 'blue', value: inactive, label: 'Inactive', trend: '-2%', trendType: 'down' },
           ].map((s, i) => (
             <div key={i} className="stat-card">
               <div className={`stat-card__icon stat-card__icon--${s.iconClass}`}>{s.icon}</div>
@@ -438,13 +438,22 @@ const StudentsPage = () => {
 
                 <div className="student-card__details">
                   <div className="student-card__detail-item">
-                    <FiBook />{student.course}
+                    <FiUser /> {student.name}
                   </div>
                   <div className="student-card__detail-item">
-                    <FiCalendar />{student.year}
+                    <FiPhone /> {student.phone || 'N/A'}
                   </div>
                   <div className="student-card__detail-item">
-                    <FiMail />{student.email}
+                    <FiBook /> {student.course}
+                  </div>
+                  <div className="student-card__detail-item">
+                    <FiAward /> {student.grade || 'N/A'}
+                  </div>
+                  <div className="student-card__detail-item">
+                    <FiCalendar /> {student.year}
+                  </div>
+                  <div className="student-card__detail-item">
+                    <FiMail /> {student.email}
                   </div>
                 </div>
 
