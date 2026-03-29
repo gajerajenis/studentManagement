@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  FiBookOpen, FiMail, FiLock, FiEye, FiEyeOff,
-  FiArrowRight, FiCheckCircle, FiAlertCircle,
-  FiShield, FiUsers, FiBarChart2, FiLogIn
+  FiBookOpen, FiUser, FiMail, FiLock, FiEye, FiEyeOff,
+  FiArrowRight, FiCheckCircle, FiUserPlus,
+  FiShield,
+  FiUsers,
+  FiBarChart2,
+  FiAlertCircle,
+  FiLogIn
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import './Login.scss';
