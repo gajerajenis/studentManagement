@@ -66,6 +66,27 @@ const LoginPage = () => {
     return Object.keys(e).length === 0;
   };
 
+  // const handleSubmit = async (ev) => {
+  //   ev.preventDefault();
+  //   setError('');
+  //   setSuccess('');
+
+  //   if (!validate()) return;
+
+  //   setLoading(true);
+  //   await new Promise(r => setTimeout(r, 900));
+
+  //   const result = login({ email, password });
+
+  //   if (result.ok) {
+  //     setSuccess(`Welcome back, ${result.user.firstName}! Redirecting…`);
+  //     setTimeout(() => navigate('/students'), 1000);
+  //   } else {
+  //     setError(result.error);
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setError('');
@@ -74,22 +95,39 @@ const LoginPage = () => {
     if (!validate()) return;
 
     setLoading(true);
-    await new Promise(r => setTimeout(r, 900));
 
-    const result = login({ email, password });
+    try {
+      // const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("https://studentmanagement-backend-lwu3.onrender.com/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
 
-    if (result.ok) {
-      setSuccess(`Welcome back, ${result.user.firstName}! Redirecting…`);
-      setTimeout(() => navigate('/students'), 1000);
-    } else {
-      setError(result.error);
+      const result = await res.json();
+
+      if (result.ok) {
+        setSuccess(`Welcome back, ${result.user.firstName}!`);
+        setTimeout(() => navigate('/students'), 1000);
+      } else {
+        setError(result.error);
+        setLoading(false);
+      }
+
+    } catch (err) {
+      setError("Server error");
       setLoading(false);
     }
   };
 
   return (
     <div className="login-page">
-      
+
       <aside className="lp-brand">
         <Link to="/" className="lp-brand__logo">
           <div className="lp-brand__logo-icon"><FiBookOpen /></div>
@@ -122,7 +160,7 @@ const LoginPage = () => {
 
       <main className="lp-panel">
         <div className="lp-box">
- <Link to="/" className="lp-box__mobile-logo">
+          <Link to="/" className="lp-box__mobile-logo">
             <div className="lp-box__mobile-logo-icon"><FiBookOpen /></div>
             <span>Edu<em>Manage</em></span>
           </Link>
@@ -169,7 +207,7 @@ const LoginPage = () => {
               }
             />
 
-            
+
             <div className="lp-box__opts">
               <label>
                 <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)} />

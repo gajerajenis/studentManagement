@@ -87,7 +87,6 @@ const SignupPage = () => {
 
     return (
         <div className="signup-page">
-
             <aside className="sp-brand">
                 <Link to="/" className="sp-brand__logo">
                     <div className="sp-brand__logo-icon"><FiBookOpen /></div>
@@ -97,7 +96,7 @@ const SignupPage = () => {
 
             <main className="sp-panel">
                 <div className="sp-box">
-<Link to="/" className="sp-box__mobile-logo">
+                    <Link to="/" className="sp-box__mobile-logo">
                         <div className="sp-box__mobile-logo-icon"><FiBookOpen /></div>
                         <span>Edu<em>Manage</em></span>
                     </Link>
