@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   FiBookOpen, FiMail, FiLock, FiEye, FiEyeOff,
@@ -9,8 +8,8 @@ import {
   FiAlertCircle,
   FiLogIn
 } from 'react-icons/fi';
-import { useAuth } from '../../context/AuthContext';
 import './Login.scss';
+import { useState } from 'react';
 
 
 /* ✅ MOVE OUTSIDE */
@@ -57,27 +56,6 @@ const LoginPage = () => {
     setFieldErr(e);
     return Object.keys(e).length === 0;
   };
-
-  // const handleSubmit = async (ev) => {
-  //   ev.preventDefault();
-  //   setError('');
-  //   setSuccess('');
-
-  //   if (!validate()) return;
-
-  //   setLoading(true);
-  //   await new Promise(r => setTimeout(r, 900));
-
-  //   const result = login({ email, password });
-
-  //   if (result.ok) {
-  //     setSuccess(`Welcome back, ${result.user.firstName}! Redirecting…`);
-  //     setTimeout(() => navigate('/students'), 1000);
-  //   } else {
-  //     setError(result.error);
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
