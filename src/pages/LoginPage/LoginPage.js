@@ -40,8 +40,6 @@ const Field = ({ id, label, type = 'text', value, onChange, icon, err, placehold
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login, isLoggedIn } = useAuth();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPwd, setShowPwd] = useState(false);
@@ -50,12 +48,6 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [fieldErr, setFieldErr] = useState({});
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/students', { replace: true });
-    }
-  }, [isLoggedIn, navigate]);
 
   const validate = () => {
     const e = {};
