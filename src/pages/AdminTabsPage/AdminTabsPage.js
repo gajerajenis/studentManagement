@@ -1,21 +1,9 @@
 import React, { useState } from 'react';
-import { FiArrowLeft, FiImage, FiSun, FiCalendar, FiUsers, FiPlus, FiTrash2, FiEye, FiEdit2, FiX, FiUpload, FiMapPin, FiClock, FiCheckCircle, FiAlertCircle, FiInfo, FiSearch } from 'react-icons/fi';
+import { FiArrowLeft, FiImage, FiSun, FiCalendar, FiUsers, FiPlus, FiTrash2, FiEye, FiX, FiMapPin, FiClock, FiCheckCircle, FiAlertCircle, FiInfo } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import './AdminTabsPage.scss';
 import StudentsPage from './StudentsPage/StudentsPage';
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-const AVATAR_COLORS = [
-  'linear-gradient(135deg,#00d4aa,#00a884)',
-  'linear-gradient(135deg,#7c3aed,#a855f7)',
-  'linear-gradient(135deg,#ff6b35,#ff8c5a)',
-  'linear-gradient(135deg,#3b82f6,#60a5fa)',
-  'linear-gradient(135deg,#ec4899,#f472b6)',
-  'linear-gradient(135deg,#f59e0b,#fbbf24)',
-];
-const getInitials = (name) =>
-  name ? name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : 'ST';
-const getColorIndex = (id) => (id % AVATAR_COLORS.length);
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
 const ToastContainer = ({ toasts }) => (
