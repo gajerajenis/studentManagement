@@ -9,7 +9,8 @@ import {
   FiLogIn
 } from 'react-icons/fi';
 import './Login.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 
 /* ✅ MOVE OUTSIDE */
@@ -47,6 +48,14 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [fieldErr, setFieldErr] = useState({});
+  const { login, isLoggedIn } = useAuth();
+
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/students', { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   const validate = () => {
     const e = {};
@@ -61,37 +70,37 @@ const LoginPage = () => {
     ev.preventDefault();
     setError('');
     setSuccess('');
-
     if (!validate()) return;
+    const result = login({ email, password });
+    if (result.ok) {
+      setLoading(true);
+      try {
+        // const res = await fetch("http://localhost:5000/login", {
+        const res = await fetch("https://studentmanagement-backend-lwu3.onrender.com/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        });
 
-    setLoading(true);
+        const result = await res.json();
 
-    try {
-      // const res = await fetch("http://localhost:5000/login", {
-      const res = await fetch("https://studentmanagement-backend-lwu3.onrender.com/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      });
+        if (result.ok) {
+          setSuccess(`Welcome back, ${result.user.firstName}!`);
+          setTimeout(() => navigate('/students'), 1000);
+        } else {
+          setError(result.error);
+          setLoading(false);
+        }
 
-      const result = await res.json();
-
-      if (result.ok) {
-        setSuccess(`Welcome back, ${result.user.firstName}!`);
-        setTimeout(() => navigate('/students'), 1000);
-      } else {
-        setError(result.error);
+      } catch (err) {
+        setError("Server error");
         setLoading(false);
       }
-
-    } catch (err) {
-      setError("Server error");
-      setLoading(false);
     }
   };
 

@@ -1,12 +1,11 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { StudentProvider } from './context/StudentContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import HomePage     from './pages/Home/HomePage';
-import StudentsPage from './pages/Students/StudentsPage';
 import LoginPage    from './pages/LoginPage/LoginPage';
 import SignupPage   from './pages/SignupPage/SignupPage';
 import CreatorRibbon from './components/CreatorRibbon/CreatorRibbon';
+import AdminTabsPage from './pages/AdminTabsPage/AdminTabsPage';
 
 const PrivateRoute = ({ children }) => {
   const { isLoggedIn } = useAuth();
@@ -27,7 +26,7 @@ const AppContent = () => {
           path="/students"
           element={
             <PrivateRoute>
-              <StudentsPage />
+              <AdminTabsPage />
             </PrivateRoute>
           }
         />
