@@ -76,7 +76,7 @@ const Header = () => {
             {isLoggedIn && (
               <li className="header__nav-mobile-only">
                 <Link to="/students" className="header__nav-link" onClick={() => setMenuOpen(false)}>
-                  Student Portal
+                  Admin Portal
                 </Link>
               </li>
             )}
@@ -88,10 +88,10 @@ const Header = () => {
 
           {isLoggedIn ? (
             <>
-              {/* Student Portal button */}
+              {/* Admin Portal button */}
               <Link to="/students" className="header__cta-btn header__cta-btn--portal">
                 <FiGrid />
-                <span>Student Portal</span>
+                <span>Admin Portal</span>
                 <div className="header__cta-btn-glow" />
               </Link>
 

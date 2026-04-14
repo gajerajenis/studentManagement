@@ -1,7 +1,12 @@
-
 @import '../../styles/global.scss';
 
-/* ── Page shell ─────────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   ENTRANCE ANIMATION SYSTEM
+   Panel slides in from right; brand slides in from left.
+   Each form element staggers in with fade+translateY.
+══════════════════════════════════════════════════════════════════ */
+
+/* Page shell */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -18,6 +23,7 @@
     pointer-events: none;
     animation: lp-float 12s ease-in-out infinite;
   }
+
   &::after {
     content: '';
     position: fixed;
@@ -26,28 +32,132 @@
     background: radial-gradient(circle, rgba(124,58,237,0.07) 0%, transparent 65%);
     pointer-events: none;
   }
+
+  /* ── Entrance states ── */
+  .lp-brand {
+    transform: translateX(-40px);
+    opacity: 0;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity   0.7s ease;
+  }
+
+  .lp-panel {
+    transform: translateX(40px);
+    opacity: 0;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s,
+                opacity   0.7s ease 0.1s;
+  }
+
+  /* Stagger for form children */
+  .lp-box__head,
+  .lp-box__field,
+  .lp-box__opts,
+  .lp-box__submit,
+  .lp-box__div,
+  .lp-box__foot,
+  .lp-box__error,
+  .lp-box__success {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+
+  /* Brand features stagger */
+  .lp-brand__feature {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+
+  /* ── MOUNTED: reveal everything ── */
+  &--mounted {
+    .lp-brand {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .lp-panel {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .lp-box__head        { opacity: 1; transform: translateY(0); transition-delay: 0.25s; }
+
+    /* fields */
+    .lp-box__field:nth-child(1) { opacity: 1; transform: translateY(0); transition-delay: 0.35s; }
+    .lp-box__field:nth-child(2) { opacity: 1; transform: translateY(0); transition-delay: 0.42s; }
+    .lp-box__field:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.49s; }
+
+    .lp-box__opts    { opacity: 1; transform: translateY(0); transition-delay: 0.52s; }
+    .lp-box__submit  { opacity: 1; transform: translateY(0); transition-delay: 0.58s; }
+    .lp-box__div     { opacity: 1; transform: translateY(0); transition-delay: 0.63s; }
+    .lp-box__foot    { opacity: 1; transform: translateY(0); transition-delay: 0.67s; }
+
+    .lp-box__error,
+    .lp-box__success { opacity: 1; transform: translateY(0); transition-delay: 0s; }
+
+    /* brand features */
+    .lp-brand__feature--0 { opacity: 1; transform: translateX(0); transition-delay: 0.4s; }
+    .lp-brand__feature--1 { opacity: 1; transform: translateX(0); transition-delay: 0.55s; }
+    .lp-brand__feature--2 { opacity: 1; transform: translateX(0); transition-delay: 0.70s; }
+  }
 }
 
-/* ── Left brand panel ───────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   LEFT BRAND PANEL
+══════════════════════════════════════════════════════════════════ */
 .lp-brand {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 52px 56px;
+  padding: 40px 56px;
   position: relative;
   overflow: hidden;
+  gap: 48px;
 
   @media (max-width: 900px) { display: none; }
 
+  /* Grid overlay */
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,0.018) 60px),
+      repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(255,255,255,0.018) 60px),
       repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,0.018) 60px);
     pointer-events: none;
+  }
+
+  /* ── Back button ── */
+  &__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid $border;
+    border-radius: $radius-xl;
+    padding: 8px 16px;
+    color: $text-secondary;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: $transition;
+    align-self: flex-start;
+    position: relative;
+    z-index: 2;
+
+    svg {
+      font-size: 0.9rem;
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      border-color: $primary;
+      color: $primary;
+      background: rgba(0,212,170,0.06);
+
+      svg { transform: translateX(-3px); }
+    }
   }
 
   &__logo {
@@ -100,12 +210,12 @@
 
   &__feature {
     display: flex; align-items: center; gap: 14px;
-    animation: slide-in-up 0.5s ease both;
-    @for $i from 1 through 3 { &:nth-child(#{$i}) { animation-delay: #{$i * 0.1}s; } }
 
     &-icon {
       width: 40px; height: 40px; border-radius: $radius-sm;
       display: flex; align-items: center; justify-content: center; font-size: 1rem;
+      flex-shrink: 0;
+
       &--teal   { background: rgba(0,212,170,0.12); color: $primary; }
       &--purple { background: rgba(124,58,237,0.12); color: $accent-light; }
       &--orange { background: rgba(255,107,53,0.12); color: $warning; }
@@ -116,39 +226,11 @@
       span   { font-size: 0.76rem; color: $text-muted; }
     }
   }
-
-  &__card {
-    position: relative; z-index: 1;
-    background: rgba(17,24,39,0.85);
-    border: 1px solid rgba(0,212,170,0.15);
-    border-radius: $radius-lg;
-    padding: 18px 22px;
-    display: flex; align-items: center; gap: 14px;
-    backdrop-filter: blur(20px);
-    animation: lp-float 6s ease-in-out infinite;
-    align-self: flex-start;
-
-    &-av {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: linear-gradient(135deg, $primary, $accent);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.82rem; font-weight: 800; color: #fff; flex-shrink: 0;
-    }
-    &-info strong { display: block; font-size: 0.88rem; font-weight: 600; color: $text-primary; }
-    &-info span   { font-size: 0.74rem; color: $text-muted; }
-    &-badge {
-      margin-left: auto;
-      padding: 3px 10px;
-      background: rgba(0,212,170,0.12);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: $radius-xl;
-      font-size: 0.7rem; font-weight: 700;
-      color: $primary; text-transform: uppercase; letter-spacing: 0.06em;
-    }
-  }
 }
 
-/* ── Right form panel ───────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   RIGHT FORM PANEL
+══════════════════════════════════════════════════════════════════ */
 .lp-panel {
   width: 480px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
@@ -158,18 +240,49 @@
   backdrop-filter: blur(24px);
   position: relative; z-index: 1;
 
-  @media (max-width: 900px) { width: 100%; padding: 40px 24px; border-left: none; }
+  @media (max-width: 900px) {
+    width: 100%;
+    padding: 40px 24px;
+    border-left: none;
+  }
+
+  /* Mobile back button (top-left corner) */
+  &__back {
+    display: none;
+    position: absolute;
+    top: 18px; left: 18px;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    width: 38px; height: 38px;
+    align-items: center; justify-content: center;
+    color: $text-secondary;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: $transition;
+    z-index: 10;
+
+    &:hover {
+      border-color: $primary;
+      color: $primary;
+    }
+
+    @media (max-width: 900px) { display: flex; }
+  }
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   FORM BOX
+══════════════════════════════════════════════════════════════════ */
 .lp-box {
   width: 100%; max-width: 360px;
-  animation: slide-in-up 0.5s ease;
 
   /* Mobile logo */
   &__mobile-logo {
     display: none;
     align-items: center; justify-content: center; gap: 10px;
     margin-bottom: 32px; text-decoration: none;
+
     @media (max-width: 900px) { display: flex; }
 
     &-icon {
@@ -179,6 +292,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 1.1rem; color: #fff;
     }
+
     span {
       font-family: $font-display;
       font-size: 1.3rem; font-weight: 800; color: $text-primary;
@@ -197,12 +311,16 @@
     letter-spacing: 0.1em; text-transform: uppercase;
     color: $primary; margin-bottom: 14px;
 
-    span { width: 5px; height: 5px; border-radius: 50%; background: $primary; animation: pulse 2s infinite; }
+    span {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: $primary; animation: pulse 2s infinite;
+    }
   }
 
   &__title {
     font-family: $font-display;
-    font-size: 1.9rem; font-weight: 800; color: $text-primary; line-height: 1.1; margin-bottom: 6px;
+    font-size: 1.9rem; font-weight: 800;
+    color: $text-primary; line-height: 1.1; margin-bottom: 6px;
   }
 
   &__sub { font-size: 0.85rem; color: $text-secondary; line-height: 1.6; }
@@ -215,63 +333,130 @@
     padding: 11px 15px;
     display: flex; align-items: center; gap: 9px;
     font-size: 0.83rem; font-weight: 500;
-    animation: slide-in-up 0.25s ease;
   }
   &__error   { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); color: #f87171; }
   &__success { background: rgba(0,212,170,0.1);  border: 1px solid rgba(0,212,170,0.25);  color: $primary; }
 
-  /* Field */
+  /* ── Field ── */
   &__field {
-    display: flex; flex-direction: column; gap: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
 
     label {
       font-size: 0.75rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.07em; color: $text-secondary;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: $text-secondary;
     }
 
     &-wrap {
       position: relative;
-      svg.fi-left {
-        position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-        color: $text-muted; font-size: 0.95rem; pointer-events: none;
-      }
-      button.eye {
-        position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-        background: none; border: none; color: $text-muted; font-size: 0.95rem;
-        display: flex; align-items: center; transition: $transition;
-        &:hover { color: $primary; }
-      }
+      display: flex;
+      align-items: center;
+    }
+
+    /* Left icon container */
+    &-icon-left {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $text-muted;
+      font-size: 0.95rem;
+      pointer-events: none;
+      z-index: 1;
+      line-height: 1;
+
+      svg { display: block; }
+    }
+
+    /* Right icon / eye button container */
+    &-icon-right {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
     }
 
     input {
       width: 100%;
-      background: $bg-input; border: 1px solid $border; border-radius: $radius-md;
-      padding: 12px 16px 12px 42px; color: $text-primary; font-size: 0.88rem; outline: none;
+      background: $bg-input;
+      border: 1px solid $border;
+      border-radius: $radius-md;
+      padding: 12px 16px;        /* L/R overridden inline by icon presence */
+      color: $text-primary;
+      font-size: 0.88rem;
+      outline: none;
       transition: $transition;
+
       &::placeholder { color: $text-muted; }
+
       &:focus {
         border-color: $primary;
         background: rgba(0,212,170,0.04);
         box-shadow: 0 0 0 3px rgba(0,212,170,0.1);
+
+        /* light-up left icon on focus */
+        & ~ .lp-box__field-icon-left { color: $primary; }
       }
     }
-    &--no-icon input { padding-left: 16px; }
-    &--error input  { border-color: #f87171; &:focus { box-shadow: 0 0 0 3px rgba(248,113,113,0.1); } }
+
+    &--error input {
+      border-color: #f87171;
+      &:focus { box-shadow: 0 0 0 3px rgba(248,113,113,0.1); }
+    }
+
     &__err { font-size: 0.73rem; color: #f87171; }
+  }
+
+  /* Eye toggle button */
+  &__eye {
+    background: none;
+    border: none;
+    color: $text-muted;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: $radius-sm;
+    transition: $transition;
+    line-height: 1;
+
+    svg { display: block; }
+
+    &:hover {
+      color: $primary;
+      background: rgba(0,212,170,0.08);
+    }
   }
 
   /* Options row */
   &__opts {
     display: flex; align-items: center; justify-content: space-between;
-    label { display: flex; align-items: center; gap: 7px; cursor: pointer; font-size: 0.8rem; color: $text-secondary;
+
+    label {
+      display: flex; align-items: center; gap: 7px;
+      cursor: pointer; font-size: 0.8rem; color: $text-secondary;
       input[type=checkbox] { accent-color: $primary; }
     }
-    a { font-size: 0.8rem; color: $primary; font-weight: 500; transition: $transition;
+
+    a {
+      font-size: 0.8rem; color: $primary; font-weight: 500;
+      transition: $transition;
       &:hover { text-decoration: underline; }
     }
   }
 
-  /* Submit btn */
+  /* Submit button */
   &__submit {
     width: 100%; padding: 14px;
     background: linear-gradient(135deg, $primary, $primary-dark);
@@ -279,23 +464,28 @@
     border-radius: $radius-md; border: none; transition: $transition;
     display: flex; align-items: center; justify-content: center; gap: 8px;
     position: relative; overflow: hidden; margin-top: 4px;
+    cursor: pointer;
 
     &::before {
-      content: ''; position: absolute; inset: 0;
+      content: '';
+      position: absolute; inset: 0;
       background: rgba(255,255,255,0.15);
       transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
     }
+
     &:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 10px 36px rgba(0,212,170,0.4);
       &::before { transform: scaleX(1); }
     }
+
     &:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
 
     .spin {
       width: 17px; height: 17px;
       border: 2px solid rgba(10,15,26,0.3); border-top-color: $bg-dark;
-      border-radius: 50%; animation: spin 0.65s linear infinite;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
     }
   }
 
@@ -306,17 +496,30 @@
     &::before, &::after { content: ''; flex: 1; height: 1px; background: $border; }
   }
 
-  /* Footer link */
+  /* Footer */
   &__foot {
     text-align: center; font-size: 0.81rem; color: $text-muted;
-    a { color: $primary; font-weight: 600; transition: $transition;
+    a {
+      color: $primary; font-weight: 600; transition: $transition;
       &:hover { text-decoration: underline; }
     }
   }
 }
 
-/* ── keyframes local ─────────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════════════════════════════ */
 @keyframes lp-float {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-8px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* left icon colour follows focus via sibling — 
+   because the icon is BEFORE input in DOM we use :focus-within on wrap */
+.lp-box__field-wrap:focus-within .lp-box__field-icon-left {
+  color: $primary;
 }

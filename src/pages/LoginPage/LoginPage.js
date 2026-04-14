@@ -6,19 +6,23 @@ import {
   FiUsers,
   FiBarChart2,
   FiAlertCircle,
-  FiLogIn
+  FiLogIn,
+  FiArrowLeft,
 } from 'react-icons/fi';
 import './Login.scss';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
 
-/* ✅ MOVE OUTSIDE */
-const Field = ({ id, label, type = 'text', value, onChange, icon, err, placeholder, noIcon, right, setFieldErr, setError }) => (
-  <div className={`lp-box__field${noIcon ? ' lp-box__field--no-icon' : ''}${err ? ' lp-box__field--error' : ''}`}>
+/* ── Field Component ─────────────────────────────────────────────────────── */
+const Field = ({
+  id, label, type = 'text', value, onChange,
+  icon, err, placeholder, right, setFieldErr, setError,
+}) => (
+  <div className={`lp-box__field${err ? ' lp-box__field--error' : ''}`}>
     <label htmlFor={id}>{label}</label>
     <div className="lp-box__field-wrap">
-      {!noIcon && <span className="fi-left">{icon}</span>}
+      {icon && <span className="lp-box__field-icon-left">{icon}</span>}
       <input
         id={id}
         type={type}
@@ -30,8 +34,9 @@ const Field = ({ id, label, type = 'text', value, onChange, icon, err, placehold
         }}
         placeholder={placeholder}
         autoComplete={id}
+        style={{ paddingLeft: icon ? '42px' : '16px', paddingRight: right ? '44px' : '16px' }}
       />
-      {right}
+      {right && <span className="lp-box__field-icon-right">{right}</span>}
     </div>
     {err && <span className="lp-box__field__err">{err}</span>}
   </div>
@@ -40,21 +45,25 @@ const Field = ({ id, label, type = 'text', value, onChange, icon, err, placehold
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [showPwd, setShowPwd] = useState(false);
+  const [showPwd, setShowPwd]   = useState(false);
   const [remember, setRemember] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState('');
+  const [success, setSuccess]   = useState('');
   const [fieldErr, setFieldErr] = useState({});
-  const { login, isLoggedIn } = useAuth();
+  const [mounted, setMounted]   = useState(false);
+  const { login, isLoggedIn }   = useAuth();
 
+  /* trigger entrance animation */
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/students', { replace: true });
-    }
+    if (isLoggedIn) navigate('/students', { replace: true });
   }, [isLoggedIn, navigate]);
 
   const validate = () => {
@@ -75,46 +84,47 @@ const LoginPage = () => {
     if (result.ok) {
       setLoading(true);
       try {
-        // const res = await fetch("http://localhost:5000/login", {
         const res = await fetch("https://studentmanagement-backend-lwu3.onrender.com/login", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email,
-            password
-          })
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
         });
-
-        const result = await res.json();
-
-        if (result.ok) {
-          setSuccess(`Welcome back, ${result.user.firstName}!`);
+        const data = await res.json();
+        if (data.ok) {
+          setSuccess(`Welcome back, ${data.user.firstName}!`);
           setTimeout(() => navigate('/students'), 1000);
         } else {
-          setError(result.error);
+          setError(data.error);
           setLoading(false);
         }
-
-      } catch (err) {
-        setError("Server error");
+      } catch {
+        setError("Server error. Please try again.");
         setLoading(false);
       }
     }
   };
 
   return (
-    <div className="login-page">
+    <div className={`login-page${mounted ? ' login-page--mounted' : ''}`}>
 
+      {/* ── Left brand panel ─────────────────────────────────────────── */}
       <aside className="lp-brand">
+
+        {/* Back button */}
+        <button className="lp-brand__back" onClick={() => navigate('/')} aria-label="Back to home">
+          <FiArrowLeft />
+          <span>Back to Home</span>
+        </button>
+
         <Link to="/" className="lp-brand__logo">
           <div className="lp-brand__logo-icon"><FiBookOpen /></div>
           <span className="lp-brand__logo-text">Edu<span>Manage</span></span>
         </Link>
 
         <div className="lp-brand__center">
-          <h1 className="lp-brand__headline">Your Campus.<br /><em>Fully Connected.</em></h1>
+          <h1 className="lp-brand__headline">
+            Your Campus.<br /><em>Fully Connected.</em>
+          </h1>
           <p className="lp-brand__sub">
             Sign in to access your dashboard — manage students, track performance,
             and stay on top of academic operations in real time.
@@ -122,14 +132,15 @@ const LoginPage = () => {
 
           <div className="lp-brand__features">
             {[
-              { icon: <FiShield />, cls: 'teal', title: 'Secure Access', desc: 'Role-based login with encryption' },
-              { icon: <FiBarChart2 />, cls: 'purple', title: 'Live Analytics', desc: 'Real-time performance dashboards' },
-              { icon: <FiUsers />, cls: 'orange', title: 'Student Management', desc: 'Full CRUD with advanced filters' },
+              { icon: <FiShield />,    cls: 'teal',   title: 'Secure Access',       desc: 'Role-based login with encryption' },
+              { icon: <FiBarChart2 />, cls: 'purple',  title: 'Live Analytics',      desc: 'Real-time performance dashboards' },
+              { icon: <FiUsers />,     cls: 'orange',  title: 'Student Management',  desc: 'Full CRUD with advanced filters' },
             ].map((f, i) => (
-              <div key={i} className="lp-brand__feature">
+              <div key={i} className={`lp-brand__feature lp-brand__feature--${i}`}>
                 <div className={`lp-brand__feature-icon lp-brand__feature-icon--${f.cls}`}>{f.icon}</div>
                 <div className="lp-brand__feature-text">
-                  <strong>{f.title}</strong><span>{f.desc}</span>
+                  <strong>{f.title}</strong>
+                  <span>{f.desc}</span>
                 </div>
               </div>
             ))}
@@ -137,7 +148,14 @@ const LoginPage = () => {
         </div>
       </aside>
 
+      {/* ── Right form panel ─────────────────────────────────────────── */}
       <main className="lp-panel">
+
+        {/* Mobile back button */}
+        <button className="lp-panel__back" onClick={() => navigate('/')} aria-label="Back to home">
+          <FiArrowLeft />
+        </button>
+
         <div className="lp-box">
           <Link to="/" className="lp-box__mobile-logo">
             <div className="lp-box__mobile-logo-icon"><FiBookOpen /></div>
@@ -152,8 +170,8 @@ const LoginPage = () => {
 
           <form className="lp-box__form" onSubmit={handleSubmit} noValidate>
 
-            {error && <div className="lp-box__error"><FiAlertCircle /> {error}</div>}
-            {success && <div className="lp-box__success"><FiCheckCircle /> {success}</div>}
+            {error   && <div className="lp-box__error">  <FiAlertCircle /> {error}   </div>}
+            {success && <div className="lp-box__success"> <FiCheckCircle /> {success} </div>}
 
             <Field
               id="email"
@@ -180,12 +198,11 @@ const LoginPage = () => {
               setFieldErr={setFieldErr}
               setError={setError}
               right={
-                <button type="button" className="eye" onClick={() => setShowPwd(v => !v)}>
+                <button type="button" className="lp-box__eye" onClick={() => setShowPwd(v => !v)}>
                   {showPwd ? <FiEyeOff /> : <FiEye />}
                 </button>
               }
             />
-
 
             <div className="lp-box__opts">
               <label>
@@ -196,7 +213,9 @@ const LoginPage = () => {
             </div>
 
             <button type="submit" className="lp-box__submit" disabled={loading}>
-              {loading ? <><div className="spin" /> Signing in…</> : <><FiLogIn /> Sign In <FiArrowRight /></>}
+              {loading
+                ? <><div className="spin" /> Signing in…</>
+                : <><FiLogIn /> Sign In <FiArrowRight /></>}
             </button>
 
             <div className="lp-box__div">or</div>
